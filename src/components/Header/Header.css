@@ -1,0 +1,20 @@
+.squeeze-logo {
+  height: 8vmin;
+  pointer-events: none;
+  object-fit: contain;
+}
+
+.menuItemcss {
+    display: flex;
+    align-items: center;
+    color: black;
+    padding: 2px;
+    width: 100%;
+    text-decoration: none;
+    font-weight: 400;
+
+}
+
+.extraPad{
+  margin-right: 6px;
+}
