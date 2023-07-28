@@ -1,5 +1,4 @@
 import React, { lazy, Component } from "react";
-import bcrypt from "bcryptjs";
 
 const SingUpForm = lazy(() => import("./SignUpForm"));
 
@@ -13,9 +12,8 @@ class SignUpView extends Component {
   }
 
   onSubmit = async (values) => {
-    // Hash the password using bcrypt
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(values.password, salt);
+    // Hash the password using SHA-256 (client-side hashing, for educational purposes only)
+    const hashedPassword = await this.hashPassword(values.password);
 
     // Create the user object with the hashed password
     const user = {
@@ -32,12 +30,21 @@ class SignUpView extends Component {
     // Serialize the usersMap to JSON and save it in local storage
     localStorage.setItem("usersMap", JSON.stringify(Array.from(usersMap)));
 
-
     // Update the state with the new usersMap
     this.setState({ usersMap });
 
     // Alert to indicate successful registration
     alert("Registration successful!");
+    localStorage.setItem("userAuthenticated", true);
+    window.location.href = "/home";
+  };
+
+  hashPassword = async (password) => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((byte) => byte.toString(16).padStart(2, "0")).join("");
   };
   render() {
     return (

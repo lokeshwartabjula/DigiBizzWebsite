@@ -1,7 +1,5 @@
 import React, { lazy, Component } from "react";
 const SignInForm = lazy(() => import("./SignInForm"));
-import bcrypt from "bcryptjs";
-import { withRouter } from "react-router-dom";
 
 class SignInView extends Component {
     onSubmit = async (values) => {
@@ -12,13 +10,13 @@ class SignInView extends Component {
           const user = usersMap.get(values.mobileNo);
     
           if (user) {
-            const passwordMatch = await bcrypt.compare(values.password, user.password);
-            if (passwordMatch) {
+            // Hash the password using SHA-256 (client-side hashing, for educational purposes only)
+            const hashedPassword = await this.hashPassword(values.password);
+    
+            if (user.password === hashedPassword) {
               alert("Sign In successful!");
               localStorage.setItem("userAuthenticated", true);
               window.location.href = "/home";
-
-              
             } else {
               alert("Invalid credentials. Please try again.");
             }
@@ -29,6 +27,16 @@ class SignInView extends Component {
           alert("No registered users found. Please sign up first.");
         }
       };
+    
+      hashPassword = async (password) => {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map((byte) => byte.toString(16).padStart(2, "0")).join("");
+      };
+    
+    
   render() {
     return (
       <div className="container my-3">

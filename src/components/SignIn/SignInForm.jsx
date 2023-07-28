@@ -63,12 +63,12 @@ const SignInForm = (props) => {
           Log In
         </button>
       </div>
-      <Link className="float-start" to="/account/signup" title="Sign Up">
+      <Link className="float-start" to="/signUp" title="Sign Up">
         Create your account
       </Link>
       <Link
         className="float-end"
-        to="/account/forgotpassword"
+        to="/signUp"
         title="Forgot Password"
       >
         Forgot password?
