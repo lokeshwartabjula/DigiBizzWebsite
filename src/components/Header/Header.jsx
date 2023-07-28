@@ -14,6 +14,7 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import "./Header.css";
 
 const Header = () => {
+  const isUserAuthenticated = localStorage.getItem("userAuthenticated");
   return (
     <React.Fragment>
       <header className="p-3 border-bottom bg-light">
@@ -89,15 +90,15 @@ const Header = () => {
                     <hr className="dropdown-divider" />
                   </li>
                   <li>
-                    <Link className=" menuItemcss" to="/">
+                    <Link className=" menuItemcss" to="/" onClick={()=>{localStorage.setItem("userAuthenticated",false)}}>
                       <IconDoorClosedFill className="text-danger extraPad" /> Logout
                     </Link>
                   </li>
                 </ul>
               </div>
              
-              <Link to="/account/signin">Sign In</Link> |{" "}
-              <Link to="/account/signup"> Sign Up</Link>
+              { !isUserAuthenticated && <Link to="/signIn">Sign In</Link> }
+              {/* <Link to="/signUp"> Sign Up</Link> */}
             </div>
           </div>
         </div>
