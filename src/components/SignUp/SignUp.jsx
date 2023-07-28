@@ -36,7 +36,7 @@ class SignUpView extends Component {
     // Alert to indicate successful registration
     alert("Registration successful!");
     localStorage.setItem("userAuthenticated", true);
-    window.location.href = "/home";
+    // window.location.href = "/home";
   };
 
   hashPassword = async (password) => {

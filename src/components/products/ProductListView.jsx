@@ -15,6 +15,8 @@ const CardProductList = lazy(() =>
 );
 
 const FilterPrice = (props) => {
+  // ... existing code ...
+
   return (
     <div className="card mb-3">
       <div
@@ -33,9 +35,10 @@ const FilterPrice = (props) => {
               className="form-check-input"
               type="checkbox"
               id="flexCheckDefault1"
+              onChange={() => props.onSelectPriceRange(1, 50)}
             />
             <label className="form-check-label" htmlFor="flexCheckDefault1">
-              $24.00 - $29.00 <span className="text-muted">(4)</span>
+              $1.00 - $50.00 <span className="text-muted">(4)</span>
             </label>
           </div>
         </li>
@@ -44,10 +47,11 @@ const FilterPrice = (props) => {
             <input
               className="form-check-input"
               type="checkbox"
-              id="flexCheckDefault2"
+              id="flexCheckDefault1"
+              onChange={() => props.onSelectPriceRange(50, 100)}
             />
-            <label className="form-check-label" htmlFor="flexCheckDefault2">
-              $33.00 - $35.00 <span className="text-muted">(2)</span>
+            <label className="form-check-label" htmlFor="flexCheckDefault1">
+              $50.00 - $100.00 <span className="text-muted">(4)</span>
             </label>
           </div>
         </li>
@@ -56,19 +60,24 @@ const FilterPrice = (props) => {
             <input
               className="form-check-input"
               type="checkbox"
-              id="flexCheckDefault3"
+              id="flexCheckDefault1"
+              onChange={() => props.onSelectPriceRange(100, 600)}
             />
-            <label className="form-check-label" htmlFor="flexCheckDefault3">
-              $70.00 - $99.00 <span className="text-muted">(5)</span>
+            <label className="form-check-label" htmlFor="flexCheckDefault1">
+              $100.00 - $600.00 <span className="text-muted">(4)</span>
             </label>
           </div>
         </li>
+        {/* ... Add more price range options ... */}
       </ul>
     </div>
   );
 };
 
+
 const FilterCategory = (props) => {
+  // ... existing code ...
+
   return (
     <div className="card mb-3 accordion">
       <div
@@ -80,44 +89,103 @@ const FilterCategory = (props) => {
       >
         Categories
       </div>
-      <ul
-        className="list-group list-group-flush show"
-        id="filterCategory"
-      >
+      <ul className="list-group list-group-flush show" id="filterCategory">
         <li className="list-group-item">
-          <Link to="/" className="text-decoration-none stretched-link">
+          <button
+            className="btn btn-link"
+            onClick={() => props.onSelectCategory("Clothing")}
+          >
             Clothing
-          </Link>
+          </button>
         </li>
         <li className="list-group-item">
-          <Link to="/" className="text-decoration-none stretched-link">
-            Leather Bag
-          </Link>
+          <button
+            className="btn btn-link"
+            onClick={() => props.onSelectCategory("Electronics")}
+          >
+            Electronics
+          </button>
         </li>
         <li className="list-group-item">
-          <Link to="/" className="text-decoration-none stretched-link">
-            Trausers
-          </Link>
+          <button
+            className="btn btn-link"
+            onClick={() => props.onSelectCategory("Grocery")}
+          >
+            Grocery
+          </button>
         </li>
         <li className="list-group-item">
-          <Link to="/" className="text-decoration-none stretched-link">
-            Sweater & Cardigans
-          </Link>
+          <button
+            className="btn btn-link"
+            onClick={() => props.onSelectCategory("Furniture")}
+          >
+            Furniture
+          </button>
         </li>
         <li className="list-group-item">
-          <Link to="/" className="text-decoration-none stretched-link">
-            High Heels
-          </Link>
+          <button
+            className="btn btn-link"
+            onClick={() => props.onSelectCategory("Others")}
+          >
+            Others
+          </button>
         </li>
-        <li className="list-group-item">
-          <Link to="/" className="text-decoration-none stretched-link">
-            Coats & Jackets
-          </Link>
-        </li>
+        {/* ... Add more category options ... */}
       </ul>
     </div>
   );
 };
+
+// const FilterCategory = (props) => {
+//   return (
+//     <div className="card mb-3 accordion">
+//       <div
+//         className="card-header fw-bold text-uppercase accordion-icon-button"
+//         data-bs-toggle="collapse"
+//         data-bs-target="#filterCategory"
+//         aria-expanded="true"
+//         aria-controls="filterCategory"
+//       >
+//         Categories
+//       </div>
+//       <ul
+//         className="list-group list-group-flush show"
+//         id="filterCategory"
+//       >
+//         <li className="list-group-item">
+//           <Link to="/" className="text-decoration-none stretched-link">
+//             Clothing
+//           </Link>
+//         </li>
+//         <li className="list-group-item">
+//           <Link to="/" className="text-decoration-none stretched-link">
+//             Electronics
+//           </Link>
+//         </li>
+//         <li className="list-group-item">
+//           <Link to="/" className="text-decoration-none stretched-link">
+//             Grocery
+//           </Link>
+//         </li>
+//         <li className="list-group-item">
+//           <Link to="/" className="text-decoration-none stretched-link">
+//             Furniture
+//           </Link>
+//         </li>
+//         <li className="list-group-item">
+//           <Link to="/" className="text-decoration-none stretched-link">
+//             Kitchen
+//           </Link>
+//         </li>
+//         <li className="list-group-item">
+//           <Link to="/" className="text-decoration-none stretched-link">
+//             Other
+//           </Link>
+//         </li>
+//       </ul>
+//     </div>
+//   );
+// };
 
 class ProductListView extends Component {
   state = {
@@ -126,18 +194,57 @@ class ProductListView extends Component {
     totalPages: null,
     totalItems: 0,
     view: "list",
+    data:[],
+    selectedCategory: null,
+  selectedPriceRange: null,
   };
 
-  UNSAFE_componentWillMount() {
-    const totalItems = this.getProducts().length;
-    this.setState({ totalItems });
+  async componentDidMount() {
+    try {
+      const response = await fetch(
+        "https://65bt3ppugh.execute-api.us-east-1.amazonaws.com/develop/api/get-items-detail"
+      );
+      const data = await response.json();
+      this.setState({ totalItems: data.items.length, data: data.items });
+      this.onPageChanged({ currentPage: 1 });
+    } catch (error) {
+      console.error("Error fetching products data:", error);
+    }
   }
 
-  onPageChanged = (page) => {
-    let products = this.getProducts();
-    const { currentPage, totalPages, pageLimit } = page;
+  onSelectCategory = (category) => {
+    this.setState({ selectedCategory: category, currentPage: 1 }, () => {
+      this.onPageChanged({ currentPage: 1 });
+    });
+  };
+
+  onSelectPriceRange = (minPrice, maxPrice) => {
+    this.setState({ selectedPriceRange: { min: minPrice, max: maxPrice }, currentPage: 1 }, () => {
+      this.onPageChanged({ currentPage: 1 });
+    });
+  };
+
+  onPageChanged = ({ currentPage, pageLimit = 20 }) => {
+    const { totalItems, selectedCategory, selectedPriceRange } = this.state;
+    const totalPages = Math.ceil(totalItems / pageLimit);
     const offset = (currentPage - 1) * pageLimit;
-    const currentProducts = products.slice(offset, offset + pageLimit);
+    let currentProducts = this.state.data.slice(offset, offset + pageLimit);
+
+    // Apply filters if category or price range is selected
+    if (selectedCategory) {
+      currentProducts = currentProducts.filter(
+        (product) => product.category === selectedCategory
+      );
+    }
+
+    if (selectedPriceRange) {
+      currentProducts = currentProducts.filter(
+        (product) =>
+          product.price >= selectedPriceRange.min &&
+          product.price <= selectedPriceRange.max
+      );
+    }
+
     this.setState({ currentPage, currentProducts, totalPages });
   };
 
@@ -145,45 +252,25 @@ class ProductListView extends Component {
     this.setState({ view });
   };
 
-  getProducts = () => {
 
-    //implement get products from backend
+  
 
-    let products = data.products;
-    products = products.concat(products);
-    products = products.concat(products);
-    products = products.concat(products);
-    products = products.concat(products);
-    products = products.concat(products);
-    return products;
-  };
+  
 
   render() {
+    console.log("this.state.data ",this.state.data);
+    console.log("this.state.currentProducts ",this.state.currentProducts);
+    console.log("this.state.data[0].image_url ",this.state.data[0]);
+    
     return (
       <React.Fragment>
-        {/* <div
-          className="p-5 bg-primary bs-cover"
-          style={{
-            backgroundImage: "url(../../images/banner/50-Banner.webp)",
-          }}
-        >
-          <div className="container text-center">
-            <span className="display-5 px-3 bg-white rounded shadow">
-              T-Shirts
-            </span>
-          </div>
-        </div> */}
-        {/* <Breadcrumb /> */}
+     
         <div className="container-fluid mb-3">
           <div className="row">
             <div className="col-md-3">
-              <FilterCategory />
-              <FilterPrice />
-              {/* <FilterSize /> */}
-              {/* <FilterStar /> */}
-              {/* <FilterColor /> */}
-              {/* <FilterClear /> */}
-              {/* <FilterTag /> */}
+              <FilterCategory  onSelectCategory={this.onSelectCategory}/>
+              <FilterPrice onSelectPriceRange={this.onSelectPriceRange} />
+          
               <CardServices />
             </div>
             <div className="col-md-9">
@@ -196,16 +283,7 @@ class ProductListView extends Component {
                   </span>
                 </div>
                 <div className="col-5 d-flex justify-content-end">
-                  {/* <select
-                    className="form-select mw-180 float-start"
-                    aria-label="Default select"
-                  >
-                    <option value={1}>Most Popular</option>
-                    <option value={2}>Latest items</option>
-                    <option value={3}>Trending</option>
-                    <option value={4}>Price low to high</option>
-                    <option value={4}>Price high to low</option>
-                  </select> */}
+           
                   <div className="btn-group ms-3" role="group">
                     <button
                       aria-label="Grid"
@@ -256,7 +334,7 @@ class ProductListView extends Component {
               <hr />
               <Paging
                 totalRecords={this.state.totalItems}
-                pageLimit={9}
+                pageLimit={20}
                 pageNeighbours={3}
                 onPageChanged={this.onPageChanged}
                 sizing=""

@@ -98,7 +98,7 @@ const Header = () => {
               </div>
              
               { !isUserAuthenticated && <Link to="/signIn">Sign In</Link> }
-              {/* <Link to="/signUp"> Sign Up</Link> */}
+              { isUserAuthenticated && <Link to="/signUp"> Sign Up</Link>}
             </div>
           </div>
         </div>

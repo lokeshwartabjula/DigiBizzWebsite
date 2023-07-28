@@ -16,7 +16,10 @@ class SignInView extends Component {
             if (user.password === hashedPassword) {
               alert("Sign In successful!");
               localStorage.setItem("userAuthenticated", true);
-              window.location.href = "/home";
+              //change the path to home
+              // this.props.history.push("/home");
+              // window.location.href = "/home";
+              // history.push("/home");
             } else {
               alert("Invalid credentials. Please try again.");
             }

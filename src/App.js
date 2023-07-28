@@ -24,7 +24,8 @@ function App() {
   return (
     <BrowserRouter>
     <Header/>
-     {isUserAuthenticated && <TopMenu/>} 
+     {/* {isUserAuthenticated && <TopMenu/>}  */}
+     <TopMenu/>
     <Suspense
           fallback={
             <div className="text-white text-center mt-3">Loading...</div>
