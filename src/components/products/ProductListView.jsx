@@ -38,7 +38,7 @@ const FilterPrice = (props) => {
               onChange={() => props.onSelectPriceRange(1, 50)}
             />
             <label className="form-check-label" htmlFor="flexCheckDefault1">
-              $1.00 - $50.00 <span className="text-muted">(4)</span>
+              $1.00 - $50.00 <span className="text-muted"></span>
             </label>
           </div>
         </li>
@@ -51,7 +51,7 @@ const FilterPrice = (props) => {
               onChange={() => props.onSelectPriceRange(50, 100)}
             />
             <label className="form-check-label" htmlFor="flexCheckDefault1">
-              $50.00 - $100.00 <span className="text-muted">(4)</span>
+              $50.00 - $100.00 <span className="text-muted"></span>
             </label>
           </div>
         </li>
@@ -64,7 +64,7 @@ const FilterPrice = (props) => {
               onChange={() => props.onSelectPriceRange(100, 600)}
             />
             <label className="form-check-label" htmlFor="flexCheckDefault1">
-              $100.00 - $600.00 <span className="text-muted">(4)</span>
+              $100.00 - $600.00 <span className="text-muted"></span>
             </label>
           </div>
         </li>

@@ -97,8 +97,9 @@ const Header = () => {
                 </ul>
               </div>
              
-              { !isUserAuthenticated && <Link to="/signIn">Sign In</Link> }
-              { isUserAuthenticated && <Link to="/signUp"> Sign Up</Link>}
+              {   <Link to="/signIn">Sign In</Link> } | {' '}
+              {  <Link to="/signUp"> Sign Up</Link>} | {' '}
+              <Link to="/addItems">Add Items</Link>
             </div>
           </div>
         </div>
